@@ -9,7 +9,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/bankingappdb2
+    url: jdbc:postgresql://localhost:5432/bankingapptestdb?createDatabaseIfNotExist=true
     username: postgres
     password: 1996124mm
     driver-class-name: org.postgresql.Driver
