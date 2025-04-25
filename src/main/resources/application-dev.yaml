@@ -1,0 +1,45 @@
+server:
+  port: 8443
+  ssl:
+    enabled: true
+    key-store: classpath:keystore.p12
+    key-store-password: testpassword123
+    key-store-type: PKCS12
+    key-alias: banking-app
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/bankingappdb2
+    username: postgres
+    password: 1996124mm
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+    enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics  # expose desired endpoints
+  endpoint:
+    health:
+      show-details: always             # show DB details
+  health:
+    db:
+      enabled: true                    # enable DB health check
+    defaults:
+      enabled: true                    # enable core checks
+
+
+banking:
+  customer:
+    initial-balance: 100.0

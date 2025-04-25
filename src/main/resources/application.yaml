@@ -1,0 +1,12 @@
+spring:
+  profiles:
+    active: prod
+
+logging:
+  level:
+    liquibase: INFO       # or DEBUG for more detail
+    liquibase.executor.jvm: DEBUG
+    liquibase.changelog: DEBUG
+    liquibase.database: DEBUG
+    liquibase.lockservice: DEBUG
+    liquibase.parser: DEBUG
