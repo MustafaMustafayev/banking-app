@@ -36,9 +36,11 @@ services:
       DB_USER: ${POSTGRES_USER}
       DB_PASSWORD: ${POSTGRES_PASSWORD}
       KEY_STORE_PASSWORD: ${KEY_STORE_PASSWORD}
+      KAFKA_CONNECTION: ${KAFKA_CONNECTION}
     command: ["./wait-for-it.sh", "db", "5432", "--", "java", "-jar", "banking.jar"]
     volumes:
       - ./wait-for-it.sh:/app/wait-for-it.sh
+
   nginx:
     image: nginx:stable-alpine
     container_name: banking-nginx
@@ -78,11 +80,22 @@ services:
       KAFKA_RESTART_ATTEMPTS: "10"
       KAFKA_RESTART_DELAY: "5"
       ZOOKEEPER_AUTOPURGE_PURGE_INTERVAL: "0"
+      # Use the default Kafka data directory
       KAFKA_LOG_DIRS: /kafka/kafka-logs
+      KAFKA_LOG_RETENTION_HOURS: 168  # 7 days retention
+      KAFKA_LOG_RETENTION_BYTES: -1   # No size limit
     volumes:
       - kafka_data:/kafka/kafka-logs
+      - zookeeper_data:/var/lib/zookeeper/data
+      - zookeeper_log:/var/lib/zookeeper/log
       - /var/run/docker.sock:/var/run/docker.sock
 
 volumes:
   postgres_data:
+    external: false
   kafka_data:
+    external: false
+  zookeeper_data:
+    external: false
+  zookeeper_log:
+    external: false

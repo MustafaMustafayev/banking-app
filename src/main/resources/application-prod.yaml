@@ -43,3 +43,9 @@ management:
 banking:
   customer:
     initial-balance: 100.0
+
+kafka:
+  bootstrap-servers: ${KAFKA_CONNECTION}
+  acknowledgement: all
+  topics:
+    failed-transactions: failed-transactions
