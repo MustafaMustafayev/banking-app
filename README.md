@@ -8,7 +8,8 @@
 | 🧠 Clean Architecture       |                                                                               |
 | 🔐 HTTPS with NGINX         | Secured via reverse proxy on port `8443`                                      |
 | 💾 PostgreSQL               |                                                                               |
-| 💾 Liquibase                | Create database and objects                                                   |
+| 💾 Liquibase                | Create database and objects                                                   
+| 💾 Kafka                    | Send failed transactions to kafka                                             |
 | 💣 Optimistic Lock Handling | Making app more flexible and responsive, provide versioning                   |
 | 🔁 Retry Scheduler          | Scheduled task retries failed transactions every 10 seconds                   |
 | 📡 Actuator                 | Exposes `/actuator/health`, `/actuator/info` with DB, disk checks             |
