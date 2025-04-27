@@ -3,7 +3,7 @@ package com.fintech.banking.transaction.service.impl;
 import com.fintech.banking.common.exception.*;
 import com.fintech.banking.customer.entity.CustomerEntity;
 import com.fintech.banking.customer.repository.CustomerRepository;
-import com.fintech.banking.transaction.producer.FailedTransactionProducerService;
+import com.fintech.banking.transaction.kafka.producer.FailedTransactionProducerService;
 import com.fintech.banking.transaction.schedule.model.LockedTransactionDto;
 import com.fintech.banking.transaction.dto.request.TransactionPurchaseRequestDto;
 import com.fintech.banking.transaction.dto.request.TransactionRefundRequestDto;
