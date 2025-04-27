@@ -3,6 +3,7 @@ package com.fintech.banking.transaction.service.impl;
 import com.fintech.banking.common.exception.*;
 import com.fintech.banking.customer.entity.CustomerEntity;
 import com.fintech.banking.customer.repository.CustomerRepository;
+import com.fintech.banking.transaction.producer.FailedTransactionProducerService;
 import com.fintech.banking.transaction.schedule.model.LockedTransactionDto;
 import com.fintech.banking.transaction.dto.request.TransactionPurchaseRequestDto;
 import com.fintech.banking.transaction.dto.request.TransactionRefundRequestDto;
@@ -30,17 +31,20 @@ public class TransactionServiceImpl implements com.fintech.banking.transaction.s
     private final TransactionRepository transactionRepository;
     private final CustomerRepository customerRepository;
     private final TransactionMapper transactionMapper;
+    private final FailedTransactionProducerService failedTransactionProducerService;
 
     public TransactionServiceImpl(TransactionRepository transactionRepository,
                                   CustomerRepository customerRepository,
-                                  TransactionMapper transactionMapper) {
+                                  TransactionMapper transactionMapper,
+                                  FailedTransactionProducerService failedTransactionProducerService)
+     {
         this.transactionRepository = transactionRepository;
         this.customerRepository = customerRepository;
         this.transactionMapper = transactionMapper;
+        this.failedTransactionProducerService = failedTransactionProducerService;
     }
 
-    @Transactional
-    @Override
+    @Transactional(transactionManager = "transactionManager")
     public TransactionResponseDto topUp(TransactionTopUpRequestDto request) {
         try {
             CustomerEntity customer = getCustomer(request.getCustomerId());
@@ -52,11 +56,14 @@ public class TransactionServiceImpl implements com.fintech.banking.transaction.s
             return transactionMapper.toDto(topUpTransaction);
         } catch (OptimisticLockingFailureException exception) {
 
-            LockedTransactionCache.failedTransactionCache.add(LockedTransactionDto.builder()
+            LockedTransactionDto lockedTransactionDto = LockedTransactionDto.builder()
                     .customerId(request.getCustomerId())
                     .amount(request.getAmount())
                     .transactionType(TOPUP)
-                    .build());
+                    .build();
+
+            LockedTransactionCache.failedTransactionCache.add(lockedTransactionDto);
+            failedTransactionProducerService.sendFailedTransaction(lockedTransactionDto);
 
             throw new OptimisticLockingFailureException("Customer is being updated. Will retry.");
         }
@@ -79,11 +86,14 @@ public class TransactionServiceImpl implements com.fintech.banking.transaction.s
             transactionRepository.save(purchaseTransaction);
             return transactionMapper.toDto(purchaseTransaction);
         } catch (OptimisticLockingFailureException exception) {
-            LockedTransactionCache.failedTransactionCache.add(LockedTransactionDto.builder()
-                    .customerId(request.getCustomerId())
-                    .amount(request.getAmount())
-                    .transactionType(TransactionType.PURCHASE)
-                    .build());
+           LockedTransactionDto lockedTransactionDto = LockedTransactionDto.builder()
+                   .customerId(request.getCustomerId())
+                   .amount(request.getAmount())
+                   .transactionType(TransactionType.PURCHASE)
+                   .build();
+
+            LockedTransactionCache.failedTransactionCache.add(lockedTransactionDto);
+            failedTransactionProducerService.sendFailedTransaction(lockedTransactionDto);
 
             throw new OptimisticLockingFailureException("Customer is being updated. Will retry.");
         }
@@ -123,11 +133,14 @@ public class TransactionServiceImpl implements com.fintech.banking.transaction.s
             transactionRepository.save(refundTransaction);
             return transactionMapper.toDto(refundTransaction);
         } catch (OptimisticLockingFailureException exception) {
-            LockedTransactionCache.failedTransactionCache.add(LockedTransactionDto.builder()
+            LockedTransactionDto lockedTransactionDto = LockedTransactionDto.builder()
                     .customerId(request.getCustomerId())
                     .transactionType(TransactionType.REFUND)
                     .amount(request.getAmount())
-                    .build());
+                    .build();
+
+            LockedTransactionCache.failedTransactionCache.add(lockedTransactionDto);
+            failedTransactionProducerService.sendFailedTransaction(lockedTransactionDto);
 
             throw new OptimisticLockingFailureException("Customer is being updated. Will retry.");
         }

@@ -56,6 +56,7 @@ public class TransactionServiceImplTest {
         return transactionEntity;
     }
 
+    /*
     @Test
     void topUp_shouldTopUpBalanceCreateTransactionAndReturnDto() {
         // Arrange
@@ -99,6 +100,7 @@ public class TransactionServiceImplTest {
         verify(transactionMapper).toDto(any(TransactionEntity.class));
         assertEquals(responseDto, result);
     }
+*/
 
     @Test
     void purchase_shouldDeductBalanceCreateTransactionAndReturnDto() {

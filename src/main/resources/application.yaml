@@ -10,3 +10,4 @@ logging:
     liquibase.database: DEBUG
     liquibase.lockservice: DEBUG
     liquibase.parser: DEBUG
+
