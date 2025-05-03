@@ -21,6 +21,7 @@
 | 🧪 Unit Tests               | Covers `CustomerService` and `TransactionService` using JUnit + Mockito       |
 | 📡 Distributed Tracking     | Micrometer added, logback configured to store thread id, trace id and span id |
 | 🔁 Idempotency Support      | For transaction operations simple idempotency check implemented               |
+| 📏 Code checkstyle          | Custom checkstyle added to project to review code standarts                   |
 
 ---
 
