@@ -33,11 +33,11 @@ public class TransactionServiceImpl implements com.fintech.banking.transaction.s
     private final TransactionMapper transactionMapper;
     private final FailedTransactionProducerService failedTransactionProducerService;
 
+    @SuppressWarnings("checkstyle:WhitespaceAround")
     public TransactionServiceImpl(TransactionRepository transactionRepository,
                                   CustomerRepository customerRepository,
                                   TransactionMapper transactionMapper,
-                                  FailedTransactionProducerService failedTransactionProducerService)
-     {
+                                  FailedTransactionProducerService failedTransactionProducerService) {
         this.transactionRepository = transactionRepository;
         this.customerRepository = customerRepository;
         this.transactionMapper = transactionMapper;

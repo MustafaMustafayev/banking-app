@@ -1,6 +1,10 @@
 package com.fintech.banking.common.handler;
 
+import com.fintech.banking.common.constant.MessageConstants;
+import com.fintech.banking.common.service.LocalizedMessageService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,9 +13,11 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.LocaleResolver;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
@@ -19,10 +25,18 @@ import java.util.NoSuchElementException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    private final LocalizedMessageService messageService;
+
+    public GlobalExceptionHandler(LocalizedMessageService messageService) {
+        this.messageService = messageService;
+    }
+
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ErrorResponse> handleRuntimeException(RuntimeException ex) {
-        log.error("RuntimeException occurred", ex);  // ✅ logs stacktrace
-        return buildErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+
+        String errorMessage = messageService.getMessage(MessageConstants.RUNTIME_EXCEPTION);
+        log.error(errorMessage, ex);  // ✅ logs stacktrace
+        return buildErrorResponse(HttpStatus.BAD_REQUEST, errorMessage);
     }
 
     @ExceptionHandler(NoSuchElementException.class)

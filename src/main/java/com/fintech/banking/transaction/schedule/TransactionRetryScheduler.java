@@ -31,7 +31,7 @@ public class TransactionRetryScheduler {
                 System.out.println("------------schedule worked-----------");
                 LockedTransactionDto lockedTransactionDto = LockedTransactionCache.failedTransactionCache.poll();
 
-                if(lockedTransactionDto != null) {
+                if (lockedTransactionDto != null) {
                     switch (lockedTransactionDto.getTransactionType()) {
                         case TOPUP:
                             TransactionTopUpRequestDto topUpRequest = new TransactionTopUpRequestDto();

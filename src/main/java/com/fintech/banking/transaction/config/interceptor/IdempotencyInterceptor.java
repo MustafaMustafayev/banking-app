@@ -41,7 +41,7 @@ public class IdempotencyInterceptor implements HandlerInterceptor {
             response.setCharacterEncoding("UTF-8");
 
             //if optimistic lock happened, response can be
-            if(cachedResponse != null) {
+            if (cachedResponse != null) {
                 ObjectMapper objectMapper = new ObjectMapper();
                 objectMapper.registerModule(new JavaTimeModule());
                 objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
@@ -49,8 +49,7 @@ public class IdempotencyInterceptor implements HandlerInterceptor {
                 String json = objectMapper.writeValueAsString(cachedResponse);
                 response.getWriter().write(json);
                 response.getWriter().flush();
-            }
-            else{
+            } else {
                 response.getWriter().write("Your request is in progress, will retry");
             }
             return false; // 🚫 stop further processing
