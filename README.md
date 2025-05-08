@@ -53,6 +53,8 @@
 - NGINX (HTTPS)
 - Postman (API testing)
 - JUnit 5 + Mockito (unit testing)
+- Test containers
+- Localization
 
 ---
 
