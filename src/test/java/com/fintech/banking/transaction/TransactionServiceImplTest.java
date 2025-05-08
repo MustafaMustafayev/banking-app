@@ -5,7 +5,6 @@ import com.fintech.banking.customer.entity.CustomerEntity;
 import com.fintech.banking.customer.repository.CustomerRepository;
 import com.fintech.banking.transaction.dto.request.TransactionPurchaseRequestDto;
 import com.fintech.banking.transaction.dto.request.TransactionRefundRequestDto;
-import com.fintech.banking.transaction.dto.request.TransactionTopUpRequestDto;
 import com.fintech.banking.transaction.dto.response.TransactionResponseDto;
 import com.fintech.banking.transaction.entity.TransactionEntity;
 import com.fintech.banking.transaction.entity.TransactionType;
@@ -56,59 +55,13 @@ public class TransactionServiceImplTest {
         return transactionEntity;
     }
 
-    /*
-    @Test
-    void topUp_shouldTopUpBalanceCreateTransactionAndReturnDto() {
-        // Arrange
-        BigDecimal topUpAmount = BigDecimal.valueOf(50.00);
-        BigDecimal initialBalance = BigDecimal.valueOf(100.00);
-        BigDecimal expectedBalance = initialBalance.add(topUpAmount);
-
-        CustomerEntity customer = DummyDataProvider.createCustomerEntity(initialBalance);
-        Long customerId = customer.getId();
-        // Set up request DTO
-        TransactionTopUpRequestDto request = new TransactionTopUpRequestDto();
-        request.setCustomerId(customerId);
-        request.setAmount(topUpAmount);
-
-        // Set up CustomerEntity
-
-        // Set up TransactionEntity
-        TransactionEntity transaction = new TransactionEntity();
-        transaction.setId(1L);
-        transaction.setAmount(topUpAmount);
-        transaction.setCustomer(customer);
-
-        // Set up response DTO
-        TransactionResponseDto responseDto = new TransactionResponseDto();
-        responseDto.setId(transaction.getId());
-        responseDto.setAmount(topUpAmount);
-        responseDto.setCustomerId(customerId);
-
-        // Stubbing repository & mapper behavior
-        when(customerRepository.findById(customerId)).thenReturn(Optional.of(customer));
-        when(transactionMapper.toDto(any(TransactionEntity.class)))
-                .thenReturn(responseDto);
-
-        // Act
-        TransactionResponseDto result;
-        result = transactionServiceImpl.topUp(request);
-
-        // Assert
-        assertEquals(expectedBalance, customer.getBalance());
-        verify(transactionRepository).save(any(TransactionEntity.class));
-        verify(transactionMapper).toDto(any(TransactionEntity.class));
-        assertEquals(responseDto, result);
-    }
-*/
-
     @Test
     void purchase_shouldDeductBalanceCreateTransactionAndReturnDto() {
         // Arrange
         BigDecimal purchaseAmount = BigDecimal.valueOf(30.00);
         BigDecimal initialBalance = BigDecimal.valueOf(100.00);
         BigDecimal expectedBalance = initialBalance.subtract(purchaseAmount);
-        CustomerEntity customer = DummyDataProvider.createCustomerEntity(initialBalance);
+        CustomerEntity customer = TransactionDummyDataProvider.createCustomerEntity(initialBalance);
         Long customerId = customer.getId();
 
         TransactionPurchaseRequestDto request = new TransactionPurchaseRequestDto();
@@ -146,7 +99,7 @@ public class TransactionServiceImplTest {
         // Arrange
         BigDecimal purchaseAmount = BigDecimal.valueOf(150.00);
         BigDecimal initialBalance = BigDecimal.valueOf(100.00);
-        CustomerEntity customer = DummyDataProvider.createCustomerEntity(initialBalance);
+        CustomerEntity customer = TransactionDummyDataProvider.createCustomerEntity(initialBalance);
         Long customerId = customer.getId();
 
         TransactionPurchaseRequestDto request = new TransactionPurchaseRequestDto();
@@ -175,7 +128,7 @@ public class TransactionServiceImplTest {
 
         BigDecimal expectedBalance = initialBalance.add(refundAmount);
 
-        CustomerEntity customer = DummyDataProvider.createCustomerEntity(initialBalance);
+        CustomerEntity customer = TransactionDummyDataProvider.createCustomerEntity(initialBalance);
         Long customerId = customer.getId();
         TransactionEntity originalTx = setupOriginalTransaction(customer, originalAmount, TransactionType.PURCHASE);
 
@@ -218,7 +171,7 @@ public class TransactionServiceImplTest {
         request.setCustomerId(customerId);
         request.setOriginalTransactionId(originalTransactionId);
 
-        CustomerEntity customer = DummyDataProvider.createCustomerEntity(BigDecimal.valueOf(100));
+        CustomerEntity customer = TransactionDummyDataProvider.createCustomerEntity(BigDecimal.valueOf(100));
         when(customerRepository.findById(customerId)).thenReturn(Optional.of(customer));
         when(transactionRepository.findById(originalTransactionId)).thenReturn(Optional.empty());
 
@@ -241,7 +194,7 @@ public class TransactionServiceImplTest {
         request.setCustomerId(customerId);
         request.setOriginalTransactionId(originalTransactionId);
 
-        CustomerEntity customer = DummyDataProvider.createCustomerEntity(BigDecimal.valueOf(100));
+        CustomerEntity customer = TransactionDummyDataProvider.createCustomerEntity(BigDecimal.valueOf(100));
         when(customerRepository.findById(customerId)).thenReturn(Optional.of(customer));
         when(transactionRepository.findById(originalTransactionId)).thenReturn(Optional.of(tx));
 
@@ -252,7 +205,7 @@ public class TransactionServiceImplTest {
     @Test
     void refund_shouldThrow_whenCustomerDoesNotOwnTransaction() {
         // Arrange
-        CustomerEntity customer = DummyDataProvider.createCustomerEntity(BigDecimal.valueOf(100));
+        CustomerEntity customer = TransactionDummyDataProvider.createCustomerEntity(BigDecimal.valueOf(100));
         Long customerId = customer.getId(), differentCustomerId = 2L;
 
         CustomerEntity differentCustomer = new CustomerEntity();
@@ -274,7 +227,7 @@ public class TransactionServiceImplTest {
     @Test
     void refund_shouldThrow_whenTransactionIsNotPurchase() {
         // Arrange
-        CustomerEntity customer = DummyDataProvider.createCustomerEntity(BigDecimal.valueOf(100));
+        CustomerEntity customer = TransactionDummyDataProvider.createCustomerEntity(BigDecimal.valueOf(100));
         Long customerId = customer.getId();
         TransactionEntity tx = setupOriginalTransaction(customer, BigDecimal.valueOf(20), TransactionType.TOPUP);
 
@@ -292,7 +245,7 @@ public class TransactionServiceImplTest {
     @Test
     void refund_shouldThrow_whenRequestedRefundAmountGreaterThanTransactionAmount() {
         // Arrange
-        CustomerEntity customer = DummyDataProvider.createCustomerEntity(BigDecimal.valueOf(100));
+        CustomerEntity customer = TransactionDummyDataProvider.createCustomerEntity(BigDecimal.valueOf(100));
         Long customerId = customer.getId();
         TransactionEntity tx = setupOriginalTransaction(customer, BigDecimal.valueOf(20), TransactionType.PURCHASE);
 

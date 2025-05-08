@@ -1,7 +1,6 @@
 package com.fintech.banking.customer.controller;
 
 import com.fintech.banking.customer.dto.request.CustomerCreateRequestDto;
-import com.fintech.banking.customer.dto.response.CustomerCreateResponseDto;
 import com.fintech.banking.customer.service.impl.CustomerServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -18,13 +17,7 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<CustomerCreateResponseDto> createCustomer(@Valid @RequestBody CustomerCreateRequestDto request) {
+    public ResponseEntity<?> createCustomer(@Valid @RequestBody CustomerCreateRequestDto request) {
         return ResponseEntity.ok(customerServiceImpl.createCustomer(request));
-    }
-
-    @GetMapping("error")
-    public ResponseEntity<String> getError(@Valid @RequestBody CustomerCreateRequestDto request) {
-        throw new RuntimeException("ex hpnd");
-       // return ResponseEntity.ok("get error");
     }
 }

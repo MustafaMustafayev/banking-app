@@ -19,9 +19,11 @@
 | 💥 Exception Handling       | Central `@ControllerAdvice` logs and returns structured error responses       |
 | 🔒 Thread-Safe Transactions | optimistic lock implemented, locked transaction scheduled for retry           |
 | 🧪 Unit Tests               | Covers `CustomerService` and `TransactionService` using JUnit + Mockito       |
+| 🧪 Integration Tests        | Covers `CustomerController` and `TransactionController` using testcontainers  |
 | 📡 Distributed Tracking     | Micrometer added, logback configured to store thread id, trace id and span id |
 | 🔁 Idempotency Support      | For transaction operations simple idempotency check implemented               |
 | 📏 Code checkstyle          | Custom checkstyle added to project to review code standarts                   |
+| 📏 Localization             | Add messages properties based on language                                     |
 
 ---
 

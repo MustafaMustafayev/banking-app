@@ -5,7 +5,6 @@ import com.fintech.banking.customer.dto.response.CustomerCreateResponseDto;
 import com.fintech.banking.customer.entity.CustomerEntity;
 import com.fintech.banking.customer.mapper.CustomerMapper;
 import com.fintech.banking.customer.repository.CustomerRepository;
-import com.fintech.banking.customer.service.CustomerService;
 import com.fintech.banking.customer.service.impl.CustomerServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,13 +34,13 @@ public class CustomerServiceTest {
     @Test
     public void createCustomer_shouldMapAndSaveAndReturnResponse() {
 
-        CustomerCreateRequestDto request = DummyDataProvider.createCustomerCreateRequestDto();
-        CustomerEntity savedCustomer = DummyDataProvider.createCustomerEntity();
+        CustomerCreateRequestDto request = CustomerDummyDataProvider.createCustomerCreateRequestDto();
+        CustomerEntity savedCustomer = CustomerDummyDataProvider.createCustomerEntity();
 
         when(customerMapper.toEntity(request))
                 .thenReturn(savedCustomer);
 
-        CustomerCreateResponseDto responseDto = DummyDataProvider.createCustomerCreateResponseDto();
+        CustomerCreateResponseDto responseDto = CustomerDummyDataProvider.createCustomerCreateResponseDto();
 
         when(customerMapper.toDto(savedCustomer))
                 .thenReturn(responseDto);
