@@ -48,6 +48,10 @@ public class TransactionServiceImpl implements com.fintech.banking.transaction.s
     public TransactionResponseDto topUp(TransactionTopUpRequestDto request) {
         try {
             CustomerEntity customer = getCustomer(request.getCustomerId());
+            if (customer == null) {
+                throw new CustomerNotFoundException(request.getCustomerId());
+            }
+
             customer.setBalance(customer.getBalance().add(request.getAmount()));
 
             TransactionEntity topUpTransaction = createTransaction(customer, request.getAmount(), TOPUP);

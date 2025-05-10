@@ -103,7 +103,7 @@ public class TransactionServiceImplTest {
         Long customerId = customer.getId();
 
         TransactionPurchaseRequestDto request = new TransactionPurchaseRequestDto();
-        request.setCustomerId(customerId);
+            request.setCustomerId(customerId);
         request.setAmount(purchaseAmount);
 
         when(customerRepository.findById(customerId)).thenReturn(Optional.of(customer));

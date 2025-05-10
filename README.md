@@ -52,7 +52,7 @@
 - Docker & Docker Compose
 - NGINX (HTTPS)
 - Postman (API testing)
-- JUnit 5 + Mockito (unit testing)
+- JUnit 5 + Mockito (unit and integration tests)
 - Test containers
 - Localization
 
