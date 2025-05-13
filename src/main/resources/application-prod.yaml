@@ -8,6 +8,22 @@ server:
     key-alias: banking-app
 
 spring:
+  config:
+    import: "optional:consul:"
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      config:
+        enabled: true
+        format: YAML
+        prefix: config
+        default-context: application
+        data-key: data
+        fail-fast: false
+        watch:
+          enabled: true
+          delay: 1000
   datasource:
     url: ${SPRING_DATASOURCE_URL}?createDatabaseIfNotExist=true
     username: ${DB_USER}
@@ -34,6 +50,8 @@ management:
     health:
       show-details: always             # show DB details
   health:
+    consul:
+      enabled: true
     db:
       enabled: true                    # enable DB health check
     defaults:
